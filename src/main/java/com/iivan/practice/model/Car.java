@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Car {
 
-    private Long id;
+    private Long id2;
 
     private String brand;
 
