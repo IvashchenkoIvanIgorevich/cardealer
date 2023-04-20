@@ -1,9 +1,7 @@
 package com.iivan.practice.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import jakarta.persistence.*;
 import java.util.List;
@@ -14,6 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Car {
 
     @Id
@@ -28,6 +27,7 @@ public class Car {
 
     private int quantity;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "car")
     private List<Sale> saleList;
 }
