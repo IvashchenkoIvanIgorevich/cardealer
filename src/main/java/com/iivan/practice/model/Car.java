@@ -5,13 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+@Table
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Car {
 
-    private Long id2;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String brand;
 
@@ -20,4 +27,7 @@ public class Car {
     private String fuel;
 
     private int quantity;
+
+    @OneToMany(mappedBy = "car")
+    private List<Sale> saleList;
 }

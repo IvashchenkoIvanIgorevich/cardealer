@@ -1,16 +1,23 @@
 package com.iivan.practice.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
+@Entity
+@Table
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Manager {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String firstName;
@@ -22,4 +29,7 @@ public class Manager {
     private int experience;
 
     private int sales;
+
+    @OneToMany(mappedBy = "manager")
+    private List<Sale> saleList;
 }
