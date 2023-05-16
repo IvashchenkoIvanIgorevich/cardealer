@@ -3,11 +3,11 @@ package com.iivan.practice.controller;
 import com.iivan.practice.model.Car;
 import com.iivan.practice.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("/car")
 public class CarController {
 
@@ -19,8 +19,9 @@ public class CarController {
     }
 
     @GetMapping("/all")
-    public List<Car> getAllCars() {
-        return carService.getAllCars();
+    public String getAllCars(Model model) {
+        model.addAttribute("allCar", carService.getAllCars());
+        return "index";
     }
 
     @GetMapping("/{id}")
