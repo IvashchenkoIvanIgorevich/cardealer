@@ -2,35 +2,81 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link href="/webjars/bootstrap/4.3.1/css/bootstrap.css" rel="stylesheet">
+    <script type="text/javascript" src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <title>Car</title>
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
 </head>
 <body>
-    <div class="container my-2" align="center">
-        <h3>Car List</h3>
-<!--        <a th:href="@{/addnew}" class="btn btn-primary btn-sm mb-3" >Add Employee</a>-->
-        <table style="width:80%" border="1"
-               class = "table table-striped table-responsive-md">
-            <thead>
-            <tr>
-                <th>Brand</th>
-                <th>Model</th>
-                <th>Fuel</th>
-                <th>Quantity</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="car:${allCar}">
-                <td th:text="${car.brand}"></td>
-                <td th:text="${car.model}"></td>
-                <td th:text="${car.fuel}"></td>
-                <td th:text="${car.quantity}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+<div class="container my-2" align="center">
+    <h3>Car List</h3>
+    <table style="width:80%" border="1"
+           class="table table-striped table-responsive-md">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Fuel</th>
+            <th>Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="car:${allCar}">
+            <td th:text="${car.id}"></td>
+            <td th:text="${car.brand}"></td>
+            <td th:text="${car.model}"></td>
+            <td th:text="${car.fuel}"></td>
+            <td th:text="${car.quantity}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add Car</button>
+</div>
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <form th:action="@{/car/create}" method="post">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">New Car</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+<!--                    <div class="form-group">-->
+<!--                        <label for="recipient-name" class="col-form-label">Id:</label>-->
+<!--                        <input type="text" class="form-control" id="id-name" name="id">-->
+<!--                    </div>-->
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Brand:</label>
+                        <input type="text" class="form-control" id="brand-name" name="brand">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Model:</label>
+                        <input type="text" class="form-control" id="model-name" name="model">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Fuel:</label>
+                        <input type="text" class="form-control" id="recipient-name" name="fuel">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Quantity:</label>
+                        <input type="text" class="form-control" id="recipient-name" name="quantity">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 </body>
 </html>
