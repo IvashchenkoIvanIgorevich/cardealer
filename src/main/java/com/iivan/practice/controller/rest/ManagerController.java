@@ -1,4 +1,4 @@
-package com.iivan.practice.controller;
+package com.iivan.practice.controller.rest;
 
 import com.iivan.practice.model.Manager;
 import com.iivan.practice.service.ManagerService;
