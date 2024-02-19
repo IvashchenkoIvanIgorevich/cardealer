@@ -23,12 +23,8 @@ public class ManagerServiceImp implements ManagerService {
 
     @Override
     public Manager getManagerById(Long id) {
-        Optional<Manager> optionalManager = managerRepository.findById(id);
-        if (optionalManager.isEmpty()) {
-            throw new IllegalArgumentException("Manager with id " + id + "doesn't exist");
-        }
-
-        return optionalManager.get();
+        return managerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Manager with id " + id + "doesn't exist"));
     }
 
     @Override
