@@ -1,4 +1,4 @@
-name: cardealer-service build
+name: glovo-service build
 
 on:
   push:
@@ -7,27 +7,59 @@ on:
     branches: [ "master" ]
 
 jobs:
-  Build with Maven:
+  checkout-code:
+    name: Checkout code
     runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up JDK 21
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
+  build-with_maven:
+    name: Build with Maven
+    runs-on: ubuntu-latest
 
-    - name: Unit Tests
-      run: mvn -B test --file pom.xml
+    steps:
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
 
-    - name: Build with Maven
-      run: mvn clean install
+      - name: Clean
+        run: mvn clean
 
-  Set up Docker to region:
+      - name: Validate
+        run: mvn validate
+
+      - name: Compile
+        run: mvn compile
+
+      - name: Test
+        run: mvn test
+
+      - name: Package
+        run: mvn package
+
+      - name: Verify
+        run: mvn verify
+
+      - name: Install
+        run: mvn install
+
+  authenticate-to-gcp:
+    name: Authenticate to Google Cloud
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+  set-up-docker-to-region:
+    name: Set up Docker to region
     needs: authenticate-to-gcp
     runs-on: ubuntu-latest
 
@@ -42,7 +74,8 @@ jobs:
           push: true
           tags: europe-west1-docker.pkg.dev/devrate-dev/dev-rate-service/dev-rate:latest
 
-  Deploy to GCP VM:
+  deploy-to-GCP-VM:
+    name: Deploy to GCP VM
     needs: authenticate-to-gcp
     runs-on: ubuntu-latest
 
@@ -52,20 +85,4 @@ jobs:
         run: |
           # Authenticate with gcloud
           gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-
-          # Commands to SSH into the VM and run the Docker commands 
-          gcloud compute ssh dev-rate-api --zone europe-west1-b --command " 
-            source ~/.bashrc && \
-            sudo docker pull europe-west1-docker.pkg.dev/devrate-dev/dev-rate-service/dev-rate:latest && \
-            sudo docker stop dev-rate-container || true && \
-            sudo docker rm dev-rate-container || true && \
-            sudo docker run -d --name dev-rate-container -p 80:8080 \
-            -e ACTIVE_PROFILE=\$ACTIVE_PROFILE \
-            -e PG_HOST=\$PG_HOST \
-            -e PG_PORT=\$PG_PORT \
-            -e PG_DATABASE=\$PG_DATABASE \
-            -e PG_USERNAME=\$PG_USERNAME \
-            -e PG_PASSWORD=\$PG_PASSWORD \
-            -e PG_SCHEMA=\$PG_SCHEMA \
-            europe-west1-docker.pkg.dev/devrate-dev/dev-rate-service/dev-rate:latest"
 
